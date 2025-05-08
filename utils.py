@@ -1,5 +1,7 @@
 import pandas as pd
 import xml.etree.ElementTree as ET
+import os
+from datetime import datetime
 
 def extract_excel_columns(file):
     """
@@ -66,3 +68,17 @@ def extract_xml_tags(xml_file):
     except Exception as e:
         print(f"Error extracting XML tags: {str(e)}")
         return []
+
+def rename_output_file(output_file_path):
+    """
+    Renames the output file by appending the current date and time.
+    Args:
+        output_file_path (str): The original path to the file.
+    Returns:
+        str: The new path to the renamed file.
+    """
+    base_name, ext = os.path.splitext(output_file_path)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    new_filename = f"{base_name}_{timestamp}{ext}"
+    os.rename(output_file_path, new_filename)
+    return new_filename
