@@ -10,7 +10,7 @@ from process import extract_data_from_one_xml, write_dataframes_to_excel # Updat
 from utils import extract_excel_columns, extract_xml_tags, rename_output_file
 
 st.set_page_config(page_title="XML to Excel Mapping Tool", layout="wide")
-st.title("🧩 XML to Excel Column Mapping Tool")
+st.title("🧬 Fundamend Mapping Tool")
 
 # Initialize session state
 base_keys = [
