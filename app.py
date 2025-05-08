@@ -7,7 +7,7 @@ import base64
 from io import BytesIO
 
 from process import extract_data_from_one_xml, write_dataframes_to_excel # Updated import
-from utils import extract_excel_columns, extract_xml_tags
+from utils import extract_excel_columns, extract_xml_tags, rename_output_file
 
 st.set_page_config(page_title="XML to Excel Mapping Tool", layout="wide")
 st.title("🧩 XML to Excel Column Mapping Tool")
@@ -273,18 +273,21 @@ if st.session_state.get("flat_excel_columns") and st.session_state.get("xml_sour
                             final_data_to_write_by_sheet[sheet_name] = df_existing
 
                 write_dataframes_to_excel(st.session_state['excel_temp_path'], final_data_to_write_by_sheet, output_excel_file_path)
-                st.session_state['output_excel_path'] = output_excel_file_path
+                
+                # Rename the output file with a timestamp
+                new_output_excel_file_path = rename_output_file(output_excel_file_path)
+                st.session_state['output_excel_path'] = new_output_excel_file_path
                 st.success("✅ Excel generated successfully.")
                 
                 # Download button logic
-                output_file_to_download = st.session_state['output_excel_path'] # Use the variable directly
+                output_file_to_download = st.session_state['output_excel_path'] 
                 if os.path.exists(output_file_to_download):
                     with open(output_file_to_download, "rb") as f:
                         file_bytes = f.read()
                     st.download_button(
                         "⬇️ Download Mapped Excel", 
                         file_bytes, 
-                        file_name="output_filled.xlsx", # Keep consistent filename
+                        file_name=os.path.basename(new_output_excel_file_path), # Use the new timestamped filename
                         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     )
                 else:
